@@ -1,6 +1,6 @@
 # Финансовые новости: классификация тональности
 
-Учебный pipeline классификации текстов. Готовы дни 1–5: загрузка, очистка, baseline, сравнение улучшений и разбор ошибок. Предсказание на новых текстах появится на следующем этапе.
+Учебный pipeline классификации текстов. Готовы дни 1–6: загрузка, очистка, baseline, сравнение улучшений, разбор ошибок и предсказание новых текстов. Сборка единого запуска остаётся на день 7.
 
 ## Задача
 
@@ -19,9 +19,10 @@ python preprocess.py
 python train_baseline.py
 python train_improved.py
 python error_analysis.py
+python predict.py
 ```
 
-`python load_data.py` печатает ту же сводку без графиков и отчёта. `python preprocess.py` собирает таблицу для обучения: очищает текст, удаляет пустые строки, конфликты меток и повторы, кодирует классы. `python train_baseline.py` учит baseline и считает метрики на test. `python train_improved.py` сравнивает три улучшения с baseline на том же разбиении. `python error_analysis.py` строит матрицу ошибок победителя и разбирает примеры.
+`python load_data.py` печатает ту же сводку без графиков и отчёта. `python preprocess.py` собирает таблицу для обучения: очищает текст, удаляет пустые строки, конфликты меток и повторы, кодирует классы. `python train_baseline.py` учит baseline и считает метрики на test. `python train_improved.py` сравнивает три улучшения с baseline на том же разбиении. `python error_analysis.py` строит матрицу ошибок победителя и разбирает примеры. `python predict.py` сохраняет модель и классифицирует новые тексты.
 
 ## Результаты дня 1
 
@@ -47,7 +48,7 @@ python error_analysis.py
 
 - `reports/day04_comparison.md` — три улучшения против baseline, macro F1, recall класса `negative` и выбранный вариант.
 
-Сравнение идёт на том же test, что и день 3. Модель победителя в файл пока не пишется.
+Сравнение идёт на том же test, что и день 3. Файл модели пишет день 6.
 
 ## Результаты дня 5
 
@@ -55,6 +56,13 @@ python error_analysis.py
 - `reports/figures/confusion_matrix.png` — тепловая карта матрицы.
 
 Разбор идёт на том же test, что и дни 3–4.
+
+## Результаты дня 6
+
+- `models/vectorizer.joblib` и `models/model.joblib` — TF-IDF и LinearSVC, обученные на всей подготовленной таблице.
+- `reports/day06_inference.md` — формат входа и выхода и пять новых предсказаний.
+
+Вызов: `predict_sentiment("текст")` или `predict_sentiment(["текст", "..."])`. Текст сначала очищается той же `clean_text()`. Ответ — список имён классов `negative`, `neutral`, `positive`. Вероятностей нет: у LinearSVC их не бывает.
 
 ## Дальше
 
